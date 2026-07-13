@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI 视频安全巡检台</title>
+    <link rel="stylesheet" href="/static/app.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div><p>VIDEO INTELLIGENCE</p><h1>AI 视频安全巡检台</h1></div>
+        <div id="model-state" class="model-state">正在检查模型状态</div>
+      </header>
+      <section class="grid">
+        <form id="analysis-form" class="upload-panel">
+          <p class="section-kicker">NEW REVIEW</p>
+          <h2>建立一次巡检任务</h2>
+          <label class="file-drop" for="video-file"><strong>选择视频文件</strong><span>MP4 / AVI / MOV / MKV</span></label>
+          <input id="video-file" type="file" accept="video/mp4,video/x-msvideo,video/quicktime,.mkv" required hidden />
+          <p id="filename" class="filename">尚未选择文件</p>
+          <div class="controls">
+            <label>抽帧间隔（秒）<input id="sample-seconds" type="number" min="0.2" max="10" step="0.2" value="2" /></label>
+            <label>置信度阈值<input id="confidence" type="number" min="0.1" max="0.95" step="0.05" value="0.5" /></label>
+          </div>
+          <button type="submit">开始分析</button>
+          <p id="form-status" class="form-status"></p>
+        </form>
+        <section class="report-panel">
+          <div class="report-heading"><div><p class="section-kicker">AUDIT REPORT</p><h2>巡检结果</h2></div><span id="risk-badge" class="risk-badge">等待任务</span></div>
+          <div class="metrics">
+            <div><span>抽样帧数</span><strong id="sampled-frames">--</strong></div>
+            <div><span>风险事件</span><strong id="event-count">--</strong></div>
+            <div><span>目标类别</span><strong id="target-count">--</strong></div>
+          </div>
+          <div id="timeline" class="timeline empty">上传视频后，事件时间线会在这里显示。</div>
+        </section>
+      </section>
+    </main>
+    <script src="/static/app.js"></script>
+  </body>
+</html>
