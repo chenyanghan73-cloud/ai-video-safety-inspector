@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.coverage
+htmlcov/
+data/uploads/*
+data/reports/*
+models/*.pt
+!data/uploads/.gitkeep
+!data/reports/.gitkeep
+server*.log
+ui-preview*.png
