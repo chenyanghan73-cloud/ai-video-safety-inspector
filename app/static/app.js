@@ -4,6 +4,7 @@ const filename = document.querySelector("#filename");
 const status = document.querySelector("#form-status");
 const modelState = document.querySelector("#model-state");
 const riskBadge = document.querySelector("#risk-badge");
+const demoButton = document.querySelector("#load-demo");
 
 function secondsToTime(value) {
   const minutes = Math.floor(value / 60).toString().padStart(2, "0");
@@ -30,6 +31,20 @@ function renderReport(report) {
 
 fileInput.addEventListener("change", () => { filename.textContent = fileInput.files[0]?.name || "尚未选择文件"; });
 
+demoButton.addEventListener("click", async () => {
+  demoButton.disabled = true;
+  try {
+    const response = await fetch("/api/demo-report");
+    if (!response.ok) throw new Error("示例报告加载失败");
+    renderReport(await response.json());
+    status.textContent = "已加载预置示例报告（非模型实时推理）。";
+  } catch (error) {
+    status.textContent = error.message;
+  } finally {
+    demoButton.disabled = false;
+  }
+});
+
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const file = fileInput.files[0];
@@ -50,3 +65,7 @@ form.addEventListener("submit", async (event) => {
 fetch("/api/health").then((response) => response.json()).then((data) => {
   modelState.textContent = data.model_exists ? "模型已就绪" : "需配置 MODEL_PATH";
 }).catch(() => { modelState.textContent = "服务不可用"; });
+
+if (new URLSearchParams(window.location.search).get("demo") === "1") {
+  demoButton.click();
+}

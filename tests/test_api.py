@@ -12,6 +12,16 @@ def test_health_and_index_without_model(tmp_path: Path) -> None:
     assert health.json() == {"status": "ok", "model_configured": False, "model_exists": False}
 
 
+def test_returns_labeled_demo_report(tmp_path: Path) -> None:
+    client = TestClient(create_app(tmp_path))
+    response = client.get("/api/demo-report")
+
+    assert response.status_code == 200
+    assert response.json()["demo"] is True
+    assert response.json()["highest_risk"] == "high"
+    assert response.json()["events"][2]["label"] == "knife"
+
+
 def test_rejects_non_video_upload(tmp_path: Path) -> None:
     client = TestClient(create_app(tmp_path))
     response = client.post("/api/analyze", files={"file": ("report.txt", b"text", "text/plain")})

@@ -10,6 +10,7 @@ from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
+from .demo import demo_report
 from .detector import YOLODetector
 from .video import analyze_video
 
@@ -54,6 +55,10 @@ def create_app(data_dir: Path | None = None, model_path: Path | None = None) -> 
             "model_configured": bool(app.state.model_path),
             "model_exists": bool(app.state.model_path and app.state.model_path.exists()),
         }
+
+    @app.get("/api/demo-report")
+    def get_demo_report() -> dict:
+        return demo_report()
 
     @app.post("/api/analyze")
     def analyze(
